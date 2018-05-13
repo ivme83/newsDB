@@ -1,0 +1,57 @@
+
+
+<!-- views/home.handlebars -->
+{{#if user}}
+
+  <div class="news-grid">
+    <div class="news1">
+      <figure class="image">
+        <a href="/news/boingboing"><img src="/assets/imgs/boingboing.png" alt="Logo Image of BoingBoing"></a>
+      </figure>
+    </div>
+
+    <div class="news2">
+      <figure class="image">
+        <a href="#"><img src="http://via.placeholder.com/1200x675" alt="Placeholder"></a>
+      </figure>
+    </div>
+
+    <div class="news3">
+      <figure class="image">
+        <a href="#"><img src="http://via.placeholder.com/1200x675" alt="Placeholder"></a>
+      </figure>
+    </div>
+
+    <div class="news4">
+      <figure class="image">
+        <a href="#"><img src="http://via.placeholder.com/1200x675" alt="Placeholder"></a>
+      </figure>
+    </div>
+  </div>
+
+
+{{else}}
+
+    <div class="card is-size-lrg">
+      <div class="card-image">
+        <figure class="image is-3by2">
+          <img src="/assets/imgs/splash.jpg" alt="Splash image of People writing on Newspapers">
+        </figure>
+
+      </div>
+      <div class="card-content">
+
+
+        <div class="content">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Architecto, numquam.  
+        </div>
+      </div>
+      <footer class="card-footer">
+        <a href="/signin" class="card-footer-item">Log In</a>
+        <a href="/signup" class="card-footer-item">Sign Up</a>
+      </footer>
+    </div>
+
+
+{{/if}}
+

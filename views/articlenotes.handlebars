@@ -1,0 +1,38 @@
+<div class="card is-size-lrg">
+    <div class="card-image">
+        <figure class="image is-3by2">
+        <img src="{{article.imgUrl}}">
+        </figure>
+
+    </div>
+    <div class="card-content">
+        <div class="content">
+        <a href={{article.articleUrl}}><h3>{{article.title}}</h3></a>
+        </div>
+
+        {{#each article.notes}}
+            {{> articles/note-block}}
+        {{/each}}
+        
+    </div>
+
+    {{#if user}}
+        <form id="addNote">
+            <div class="field">
+                <p class="control is-expanded">
+                    <input id="formNote" class="input" type="text" name="note" placeholder="Leave a comment">
+                </p>
+            </div>
+
+            <input id="articleID" type="hidden" name="articleID" value="{{article._id}}" />
+
+            <div class="field">
+                <p class="control">
+                    <button id="post-comment-btn"class="button is-success">
+                    Post Comment
+                    </button>
+                </p>
+            </div>
+        </form>
+    {{/if}}
+</div>

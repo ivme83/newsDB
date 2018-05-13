@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <!-- Bulma CDN -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+      <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+      <!--Personal stylesheet-->
+      <link rel="stylesheet" href="/assets/css/style.css" rel="stylesheet" type="text/css">
+      {{!-- jqeury CDN --}}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      {{!-- site JS --}}
+      <script src="/assets/js/newsdb.js"></script>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+
+  <div class="container">
+    <nav class="navbar is-transparent">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+          <img src="/assets/imgs/four.svg" alt="IV News: Site aggregator" width="50" height="50">NEWS
+        </a>
+        <div class="navbar-burger burger" data-target="mainNavbarBurger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div id="mainNavbarBurger" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">
+            Home
+          </a>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link" href="/">
+              Quick
+            </a>
+            <div class="navbar-dropdown is-boxed">
+              <a class="navbar-item" href="/">
+                News Sites
+              </a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="/news/boingboing">
+                Boing Boing
+              </a>
+              <a class="navbar-item" href="#">
+                Other News Site
+              </a>
+              <a class="navbar-item" href="#">
+                Other News Site
+              </a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="#">
+                My Favorite Articles
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="field is-grouped">
+              {{#if user}} {{!--  Beginning for Handlebar if for log (in/out) --}}
+                <p class="control">
+                  <a class="button is-primary" href="/signout">
+                    <span class="icon">
+                      <i class="fas fa-user-astronaut"></i>
+                    </span>
+                    <span>Log Out</span>
+                  </a>
+                </p>
+              {{else}} {{!--  Else for Handlebar if for log (in/out) --}}
+                <p class="control">
+                  <a class="button is-primary" href="/signin">
+                    <span class="icon">
+                      <i class="fas fa-user-astronaut"></i>
+                    </span>
+                    <span>Log in</span>
+                  </a>
+                </p>
+              {{/if}} {{!--  End Handlebar if for log (in/out) --}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    {{#if error}}
+      <p>{{error}}</p>
+    {{/if}}
+
+    {{#if success}}
+      <p>{{success}}</p>
+    {{/if}}
+
+    {{#if notice}}
+      <p>{{notice}}</p>
+    {{/if}}
+
+    <!--where our other templates will insert-->
+    {{{body}}} 
+
+
+  </div> <!-- /container -->
+
+</body>
+</html>

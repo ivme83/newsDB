@@ -1,0 +1,51 @@
+body {
+    background-color: #ffffff;
+}
+
+@media (max-width: 767.98px) {
+
+}
+
+@media (min-width: 768px) {
+
+    .is-size-lrg {
+        width: 1024px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.is-vertical-center {
+    vertical-align: center;
+}
+
+.news-grid {
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 1fr;
+    /* grid-template: 100px 100px / 100 px 100px; */
+    grid-template-areas:    "n1 n2"
+                            "n3 n4";
+    grid-gap: 5px;
+    width: 100%;
+    height: 100%;
+}
+
+.news1 {
+    grid-area: n1;
+    background-color: blue;
+}
+
+.news2 {
+    grid-area: n2;
+    background-color: red;
+}
+
+.news3 {
+    grid-area: n3;
+    background-color: yellow;
+}
+
+.news4 {
+    grid-area: n4;
+    background-color: green;
+}
