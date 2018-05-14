@@ -29,6 +29,12 @@ var ArticleSchema = new Schema({
       required: true
   },
 
+  scrapedOn: {
+    type: Date,
+    default: Date.now(),
+    required: true
+  },
+
   articleSrc: {
       type: String,
       trim: true,

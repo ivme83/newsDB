@@ -19,6 +19,12 @@ var UserSchema = new Schema({
     required: true
   },
 
+  createdOn: {
+    type: Date,
+    default: Date.now(),
+    required: true
+  },
+
   articles: [
     {
         type: Schema.Types.ObjectId,
