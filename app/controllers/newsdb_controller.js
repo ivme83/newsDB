@@ -368,13 +368,17 @@ let boingboingScrape = function(){
 let getArticles = function(source){
     return new Promise(function(resolve, reject){
 
-        db.Article.find({articleSrc: source})
-            .then(function(articles){
-                resolve(articles);
-            })
-            .catch(function(err){
-                reject(err);
-            });
+        // db.Article.find({articleSrc: source})
+        //     .then(function(articles){
+        //         resolve(articles);
+        //     })
+        //     .catch(function(err){
+        //         reject(err);
+        //     });
+
+        db.Article.find({articleSrc: source}).sort('-scrapedOn').exec(function(err, articles){
+            resolve(articles);
+        });
 
     });
 }
