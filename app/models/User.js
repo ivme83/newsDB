@@ -17,7 +17,14 @@ var UserSchema = new Schema({
     type: String,
     trim: true,
     required: true
-  }
+  },
+
+  articles: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: "Article"
+    }
+]
 
 });
 

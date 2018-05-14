@@ -1,5 +1,11 @@
 <div class="columns is-multiline">
+{{#if fav}}
+    {{#each articles}}
+        {{> articles/favorite-block}}
+    {{/each}}
+{{else}}
     {{#each articles}}
         {{> articles/article-block}}
     {{/each}}
+{{/if}}
 </div>

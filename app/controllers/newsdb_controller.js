@@ -38,12 +38,23 @@ router.get('/signout', function(req, res) {
     res.redirect('/');
 });
 
-router.get('/news/:source', function(req, res){
-    addNewArticles(req.params.source, res)
+router.get('/news/favorites', function(req, res){
+    addNewArticles("favorites", req)
         .then(function(articles){
-            // console.log(articles);
-            // res.json(articles);
-            res.render('news', {user: req.user, articles: articles});
+
+            res.render('news', {fav: true, user: req.user, articles: articles});
+        })
+        .catch(function(err){
+            console.log(err);
+            res.end();
+        });
+});
+
+router.get('/news/:source', function(req, res){
+    addNewArticles(req.params.source, req)
+        .then(function(articles){
+
+            res.render('news', {fav: false, user: req.user, articles: articles});
         })
         .catch(function(err){
             console.log(err);
@@ -60,6 +71,43 @@ router.get('/article/:id', function(req, res){
             console.log(err);
             res.end();
         })
+});
+
+router.get('/api/addFav/:source/:id', function(req, res){
+    let articleID       = req.params.id;
+    let userID          = req.user._id;
+    let objectId        = mongojs.ObjectId;
+    let thisRedirect    = "/news/" + req.params.source;
+
+    db.User.findOne({_id: objectId(userID)})
+        .then(function(user){
+            let tempArr = user.articles;
+            let index   = tempArr.indexOf(articleID);
+
+            if (index >= 0){
+                res.redirect(thisRedirect);
+            } else {
+                db.User.findOneAndUpdate({_id: objectId(userID)}, {$push: {articles: articleID}},{ new: true } , function(err, user){
+                    res.redirect(thisRedirect);
+                });
+            }
+        })
+        .catch(function(err){
+            console.log(err);
+            res.redirect(thisRedirect);
+        });
+    
+});
+
+router.get('/api/removeFav/:id', function(req, res){
+    let objectId    = mongojs.ObjectId;
+    let articleID   = req.params.id;
+    let userID      = req.user._id;
+
+    db.User.update({_id: objectId(userID)}, { $pullAll: {articles: [objectId(articleID)] } }, function(err, data){
+
+        res.redirect('/news/favorites');
+    });
 });
 
 router.post('/api/addNote', function(req, res){
@@ -92,11 +140,16 @@ router.post('/api/removeNote', function(req, res){
     let noteID = req.body.id;
     let articleID = req.body.articleID;
 
-    db.Note.findOneAndRemove({_id: objectId(noteID), user: objectId(req.user._id)}, (err, note) => {
-        db.Article.update({_id: objectId(articleID)}, { $pullAll: {notes: [objectId(noteID)] } }, function(err, data){
-            // console.log(err, data);
+    db.Note.findOneAndRemove({_id: objectId(noteID), user: req.user._id}, (err, note) => {
+        if (note){
+            db.Article.update({_id: objectId(articleID)}, { $pullAll: {notes: [objectId(noteID)] } }, function(err, data){
+
+                res.end();
+            });
+        } else {
             res.end();
-        });
+        }
+
     });
 
 });
@@ -143,7 +196,6 @@ function(req, username, password, done) {
 
                 bcrypt.compare(password, hash).then((res) => {
                     if (res) {
-                        console.log("SUCCESS");
                         return done(null, user);
                     } else {
                         return done(null, false);
@@ -212,14 +264,20 @@ let genHash = function(password) {
     });
 };
 
-let addNewArticles = function(source, res) {
+let addNewArticles = function(source, req) {
     // need to create promise here
     return new Promise(function(resolve, reject) {
         switch (source){
             case "boingboing":
-                boingboingScrape(res).then(function(articles){
+            case "BoingBoing":
+                boingboingScrape().then(function(articles){
                     resolve(articles);
                 });
+                break;
+            case "favorites":
+                getFavorites(req).then(function(articles){
+                    resolve(articles);
+                });                
                 break;
             default:
                 break;
@@ -227,7 +285,7 @@ let addNewArticles = function(source, res) {
     });
 }
 
-let boingboingScrape = function(res){
+let boingboingScrape = function(){
 
     return new Promise(function(resolve, reject) {
 
@@ -321,6 +379,22 @@ let getArticles = function(source){
     });
 }
 
+let getFavorites = function(req){
+    return new Promise(function(resolve, reject){
+        let userID      = req.user._id;
+        let objectId    = mongojs.ObjectId;
+
+        db.User.findOne({_id: objectId(userID)})
+            .populate("articles")
+            .then(function(articles){
+                resolve(articles.articles);
+            })
+            .catch(function(err){
+                reject(err);
+            });
+    });
+}
+
 let getArticleAndNotes = function(articleId){
     return new Promise(function(resolve, reject){
         let objectId = mongojs.ObjectId;
@@ -328,7 +402,6 @@ let getArticleAndNotes = function(articleId){
         db.Article.find({_id: objectId(articleId)})
             .populate("notes")
             .then(function(article){
-                // console.log("ARTICLE FIND SUCCESS");
                 resolve(article);
             })
             .catch(function(err){
