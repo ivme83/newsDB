@@ -178,9 +178,9 @@ passport.deserializeUser(function(id, cb) {
 });
 
 passport.use('local', new LocalStrategy({
-    passReqToCallback : true // allows us to pass back the entire request to the callback
-},
-function(req, username, password, done) {
+        passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+    function(req, username, password, done) {
 
     process.nextTick(function() {
 
